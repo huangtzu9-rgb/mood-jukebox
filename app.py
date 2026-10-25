@@ -34,7 +34,7 @@ songs = load_data()
 # 3. 關鍵字與否定詞設定
 KEYWORDS = {
     "開心": ["開心", "快樂", "高興", "爽", "太棒", "好玩", "興奮", "棒", "讚"],
-    "難過": ["難過", "傷心", "想哭", "失戀", "孤單", "失落", "心痛", "沮喪", "低落"],
+    "難過": ["難過", "傷心", "想哭", "失戀", "孤單", "失落", "心痛", "沮喪", "低落", "心情不好", "分手"],
     "壓力": ["壓力", "焦慮", "緊張", "煩", "考試", "報告", "趕", "崩潰", "快瘋了", "累"],
     "平靜": ["平靜", "放鬆", "無聊", "安靜", "還好", "想睡", "放空"],
 }
@@ -53,7 +53,7 @@ def detect_mood(text):
                     target = NEGATED.get(mood, mood) if is_negated(text, i) else mood
                     scores[target] = scores.get(target, 0) + 1
     if not scores:
-        return "平靜"  # 防呆：抓不到關鍵字時預設為平靜
+        return "None"  # 防呆：抓不到關鍵字時預設為平靜
     return max(scores, key=scores.get)
 
 # 4. 網頁互動介面
@@ -64,7 +64,12 @@ if st.button("✨ 幫我推薦歌曲"):
         st.warning("請先輸入一些心情描述喔！")
     else:
         mood = detect_mood(user_input)
-        candidates = songs[songs["心情"] == mood]
+        
+        # 如果偵測不到心情
+        if mood is None:
+            st.warning("我不太確定你的心情，可以再多描述一點嗎？")
+        else:
+            candidates = songs[songs["心情"] == mood]
         
         # 若該分類剛好沒歌，從全體隨機挑一首
         if len(candidates) == 0:
