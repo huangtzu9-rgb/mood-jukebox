@@ -76,5 +76,5 @@ if st.button("✨ 幫我推薦歌曲"):
         st.info(f"🔍 偵測到你的心情偏向：**{mood}**")
         st.success(f"### 推薦你聽：{pick['歌名']} - {pick['歌手']}")
         
-        if '備註連結' in pick and pd.notna(pick['備註連結']):
-            st.markdown(f"🔗 [點此前往聆聽歌曲]({pick['備註連結']})")
+        if '歌曲連結' in pick and pd.notna(pick['歌曲連結']):
+            st.markdown(f"🔗 [點此前往聆聽歌曲]({pick['歌曲連結']})")
